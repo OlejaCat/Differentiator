@@ -81,8 +81,8 @@ const ArithmeticFunction ARITHMETIC_FUNCTIONS_ARRAY[] = {
 
 const int FUNCTIONS_QUANTITY = sizeof(ARITHMETIC_FUNCTIONS_ARRAY) / sizeof(ArithmeticFunction);
 
-#define ADD(left_node__, right_node__) \
-        arithmeticTreeCreateNewNode(arithmetic_tree, \
+#define ADD(tree__, left_node__, right_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
                                     { \
                                          .node_type = ArithmeticTreeNodeType_FUNCTION, \
                                          .function  = { \
@@ -91,8 +91,8 @@ const int FUNCTIONS_QUANTITY = sizeof(ARITHMETIC_FUNCTIONS_ARRAY) / sizeof(Arith
                                                       } \
                                     }, left_node__, right_node__)
 
-#define SUB(left_node__, right_node__) \
-        arithmeticTreeCreateNewNode(arithmetic_tree, \
+#define SUB(tree__, left_node__, right_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
                                     { \
                                          .node_type = ArithmeticTreeNodeType_FUNCTION, \
                                          .function  = { \
@@ -101,8 +101,8 @@ const int FUNCTIONS_QUANTITY = sizeof(ARITHMETIC_FUNCTIONS_ARRAY) / sizeof(Arith
                                                       } \
                                     }, left_node__, right_node__)
 
-#define MUL(left_node__, right_node__) \
-        arithmeticTreeCreateNewNode(arithmetic_tree, \
+#define MUL(tree__, left_node__, right_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
                                     { \
                                          .node_type = ArithmeticTreeNodeType_FUNCTION, \
                                          .function  = { \
@@ -111,8 +111,8 @@ const int FUNCTIONS_QUANTITY = sizeof(ARITHMETIC_FUNCTIONS_ARRAY) / sizeof(Arith
                                                       } \
                                     }, left_node__, right_node__)
 
-#define DIV(left_node__, right_node__) \
-        arithmeticTreeCreateNewNode(arithmetic_tree, \
+#define DIV(tree__, left_node__, right_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
                                     { \
                                          .node_type = ArithmeticTreeNodeType_FUNCTION, \
                                          .function  = { \
@@ -121,8 +121,8 @@ const int FUNCTIONS_QUANTITY = sizeof(ARITHMETIC_FUNCTIONS_ARRAY) / sizeof(Arith
                                                       } \
                                     }, left_node__, right_node__)
 
-#define POW(left_node__, right_node__) \
-        arithmeticTreeCreateNewNode(arithmetic_tree, \
+#define POW(tree__, left_node__, right_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
                                     { \
                                          .node_type = ArithmeticTreeNodeType_FUNCTION, \
                                          .function  = { \

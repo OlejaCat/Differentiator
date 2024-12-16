@@ -182,7 +182,7 @@ int treeGetRightNode_(Tree* tree, int node_index LOGGER_PARAMETERS)
     treeLogState(tree);
 #endif
 
-    return tree->nodes_array[node_index].left_index;
+    return tree->nodes_array[node_index].right_index;
 }
 
 
@@ -212,11 +212,11 @@ int treeCreateNewNode_(Tree* tree, tree_node_type data LOGGER_PARAMETERS)
     int index = (int)tree->nodes_number;
 
     tree->nodes_array[index] = {
-        .data = data,
-        .node_index = index,
+        .data         = data,
+        .node_index   = index,
 
-        .left_index = EMPTY_NODE,
-        .right_index = EMPTY_NODE,
+        .left_index   = EMPTY_NODE,
+        .right_index  = EMPTY_NODE,
         .parent_index = EMPTY_NODE,
     };
 

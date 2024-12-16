@@ -80,6 +80,11 @@ void treePrintDataFromArray(Tree* tree)
 #ifdef LOGGER
 void treeOpenLogFile_()
 {
+    if (log_tree_file != NULL)
+    {
+        return;
+    }
+
     log_tree_file = fopen(LOG_FILE_PATH, "w");
     if (log_tree_file == NULL)
     {

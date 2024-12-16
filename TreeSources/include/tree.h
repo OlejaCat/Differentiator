@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-#include "arithmetic_tree_structure.h"
+#include "arithmetic_node_structure.h"
 
 typedef AriphmeticNodeData tree_node_type;
 
@@ -13,15 +13,11 @@ typedef struct TreeNode TreeNode;
 
 const int EMPTY_NODE = -1;
 
-#if defined(DUMP) || defined(LOGGER)
+#if defined(LOGGER) || defined(DUMP)
     #define DUMP_PARAMETERS const char* file_name, int line_number, const char* function
-#else
-    #define DUMP_PARAMETERS
-#endif
-
-#ifdef LOGGER
     #define LOGGER_PARAMETERS , const char* file_name, int line_number, const char* function
 #else
+    #define DUMP_PARAMETERS
     #define LOGGER_PARAMETERS
 #endif
 

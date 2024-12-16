@@ -15,8 +15,8 @@ ifeq ($(CC), gcc)
 CFLAGS += -Waggressive-loop-optimizations -Wmissing-declarations -Wcast-align -Wcast-qual -Wchar-subscripts -Wconversion -Wempty-body -Wfloat-equal -Wformat-nonliteral -Wformat-security -Wformat-signedness -Wformat=2 -Winline -Wlogical-op -Wopenmp-simd -Wpacked -Wpointer-arith -Winit-self -Wredundant-decls -Wshadow -Wsign-conversion -Wstrict-overflow=2 -Wsuggest-attribute=noreturn -Wsuggest-final-methods -Wsuggest-final-types -Wswitch-default -Wsync-nand -Wundef -Wunreachable-code -Wunused -Wvariadic-macros -Wno-missing-field-initializers -Wno-narrowing -Wno-varargs -Wstack-usage=8192 -Wstack-protector
 endif
 
-INCLUDES := -Iinclude -IMyMiniLib/include -ITreeSources/include -IExpressionProcessing/include
-SRCS := source/arithmetic_logic.cpp source/arithmetic_operations.cpp source/main.cpp TreeSources/source/tree.cpp TreeSources/source/tree_dump.cpp ExpressionProcessing/source/lexical_analysis.cpp ExpressionProcessing/source/syntax_analysis.cpp
+INCLUDES := -Iinclude -IArithmeticTree/include -ITreeSources/include -IExpressionProcessing/include
+SRCS := source/main.cpp ArithmeticTree/source/differentiation_logic.cpp ArithmeticTree/source/arithmetic_logic.cpp ArithmeticTree/source/arithmetic_operations.cpp TreeSources/source/tree.cpp TreeSources/source/tree_dump.cpp ExpressionProcessing/source/lexical_analysis.cpp ExpressionProcessing/source/syntax_analysis.cpp
 OBJS := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(notdir $(SRCS)))
 
 ASAN_FLAGS := -fsanitize=address,bool,bounds,enum,float-cast-overflow,float-divide-by-zero,integer-divide-by-zero,leak,nonnull-attribute,null,object-size,return,returns-nonnull-attribute,shift,signed-integer-overflow,undefined,unreachable,vla-bound,vptr
@@ -40,6 +40,9 @@ $(BUILD_DIR)/%.o: TreeSources/source/%.cpp
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 $(BUILD_DIR)/%.o: ExpressionProcessing/source/%.cpp
+	@$(CC) $(CFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/%.o: ArithmeticTree/source/%.cpp
 	@$(CC) $(CFLAGS) -c $< -o $@
 
 clean:

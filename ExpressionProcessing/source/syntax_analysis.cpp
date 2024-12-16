@@ -33,9 +33,8 @@ int parseString(ArithmeticTree* arithmetic_tree, const char* input_string)
     int node = parseExpression(arithmetic_tree, token_array, &ip);
 
     printTokens(token_array, token_count);
-    fprintf(stderr, "How we get hear...\n");
 
-    if (token_array[ip].type != TokenType_END)
+    if (token_array[token_count].type != TokenType_END)
     {
         free(token_array);
         fprintf(stderr, "Syntax error on last step...\n");
@@ -62,7 +61,7 @@ static int parseNumber(ArithmeticTree* arithmetic_tree, Token* token_array, int*
         if (!strcmp(token_array[*ip].value, "x"))
         {
             (*ip)++;
-            return VARIABLE("x");
+            return VARIABLE(arithmetic_tree->expression_tree, "x");
         }
         else
         {
@@ -81,7 +80,7 @@ static int parseNumber(ArithmeticTree* arithmetic_tree, Token* token_array, int*
             exit(1);
         }
         (*ip)++;
-        return NUMBER(number);
+        return NUMBER(arithmetic_tree->expression_tree, number);
     }
 }
 
@@ -104,11 +103,11 @@ static int parseExpression(ArithmeticTree* arithmetic_tree, Token* token_array, 
 
         if (token.function.type == ArithmeticFunctions_ADD)
         {
-            left_node = ADD(left_node, rigth_node);
+            left_node = ADD(arithmetic_tree->expression_tree, left_node, rigth_node);
         }
         else
         {
-            left_node = SUB(left_node, rigth_node);
+            left_node = SUB(arithmetic_tree->expression_tree, left_node, rigth_node);
         }
     }
 
@@ -134,11 +133,11 @@ static int parseTerm(ArithmeticTree* arithmetic_tree, Token* token_array, int* i
 
         if (token.function.type == ArithmeticFunctions_MUL)
         {
-            left_node = MUL(left_node, rigth_node);
+            left_node = MUL(arithmetic_tree->expression_tree, left_node, rigth_node);
         }
         else
         {
-            left_node = DIV(left_node, rigth_node);
+            left_node = DIV(arithmetic_tree->expression_tree, left_node, rigth_node);
         }
     }
 
@@ -154,13 +153,13 @@ static int parsePower(ArithmeticTree* arithmetic_tree, Token* token_array, int* 
 
     int left_node = parseParen(arithmetic_tree, token_array, ip);
     while (token_array[*ip].type == TokenType_FUNCTION
-        && 
+        &&
         token_array[*ip].function.type == ArithmeticFunctions_POW)
     {
         (*ip)++;
 
         int rigth_node = parseParen(arithmetic_tree, token_array, ip);
-        left_node = POW(left_node, rigth_node);
+        left_node = POW(arithmetic_tree->expression_tree, left_node, rigth_node);
     }
 
     return left_node;
@@ -190,114 +189,3 @@ static int parseParen(ArithmeticTree* arithmetic_tree, Token* token_array, int* 
         return parseNumber(arithmetic_tree, token_array, ip);
     }
 }
-
-
-
-// int GetP()
-// {
-//     if (s[p] == '(')
-//     {
-//         p++;
-//         int val = GetE();
-//         if (s[p] != ')')
-//         {
-//             printf("Ошибка!");
-//             exit(0);
-//         }
-//         p++;
-//         return val;
-//     }
-//     else
-//     {
-//         return GetN();
-//     }
-// }
-//
-//
-// const char* s = "5+10*((6+10)/2)$";
-// int         p = 0;
-//
-// int GetN();
-// int GetG();
-// int GetE();
-// int GetT();
-// int GetP();
-//
-// int GetG()
-// {
-//     int val = GetE();
-//     if (s[p] != '$')
-//     {
-//         printf("Ошибка!");
-//         exit(0);
-//     }
-//     p++;
-//     return val;
-// }
-//
-//
-// int GetE()
-// {
-//     int val = GetT();
-//     while (s[p] == '+' || s[p] == '-')
-//     {
-//         int op = s[p];
-//         p++;
-//         int val2 = GetT();
-//         if (op == '+')
-//         {
-//             val += val2;
-//         }
-//
-//         if (op == '-')
-//         {
-//             val -= val2;
-//         }
-//     }
-//     return val;
-// }
-//
-//
-// int GetT()
-// {
-//     int val = GetP();
-//     while (s[p] == '*' || s[p] == '/')
-//     {
-//         int op = s[p];
-//         p++;
-//         int val2 = GetP();
-//         if (op == '*')
-//         {
-//             val *= val2;
-//         }
-//
-//         if (op == '/')
-//         {
-//             val /= val2;
-//         }
-//     }
-//     return val;
-// }
-//
-//
-//
-//
-// int GetN()
-// {
-//     int val = 0;
-//     int old_p = p;
-//     while ('0' <= s[p] && s[p] <= '9')
-//     {
-//         val = val * 10 + (s[p] - '0');
-//         p++;
-//     }
-//     if (old_p != p)
-//     {
-//         return val;
-//     }
-//     else
-//     {
-//         printf("Ошибка!");
-//         exit(0);
-//     }
-// }
