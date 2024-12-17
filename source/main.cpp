@@ -20,18 +20,23 @@ int main()
 
     int node = parseString(&arm_tree, input_string);
 
-    arithmeticTreeWriteInLatex(arm_tree.expression_tree, node, "start.tex");
+    FILE* start_file = fopen("start.tex", "w");
+    arithmeticTreeWriteInLatex(start_file, arm_tree.expression_tree, node);
     treePrintDataFromArray(arm_tree.expression_tree);
 
-    printf("\n\n\n");
+    printf("\n\n");
 
-    node = recursiveDifferentiate(&arm_tree, node);
-    arithmeticTreeWriteInLatex(arm_tree.differentiated_tree, node, "end.tex");
+    FILE* end_file = fopen("end.tex", "w");
+    node = recursiveDifferentiate(end_file, &arm_tree, node);
+    arithmeticTreeWriteInLatex(end_file, arm_tree.differentiated_tree, node);
 
     treePrintDataFromArray(arm_tree.differentiated_tree);
 
 
     arithmeticTreeDtor(&arm_tree);
+
+    fclose(start_file);
+    fclose(end_file);
 
     return 0;
 }

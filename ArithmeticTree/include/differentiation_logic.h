@@ -4,7 +4,8 @@
 #include "arithmetic_logic.h"
 
 
-int recursiveDifferentiate(ArithmeticTree* arithmetic_tree,
+int recursiveDifferentiate(FILE*           file,
+                           ArithmeticTree* arithmetic_tree,
                            int             original_node_index);
 
 #endif

@@ -52,12 +52,11 @@ int arithmeticTreeCreateNewNode(Tree*              arithmetic_tree,
 }
 
 
-ArithmeticTreeErrors arithmeticTreeWriteInLatex(Tree* arithmetic_tree, int start_node_index, const char* file_path)
+ArithmeticTreeErrors arithmeticTreeWriteInLatex(FILE* file, Tree* arithmetic_tree, int start_node_index)
 {
     assert(arithmetic_tree != NULL);
-    assert(file_path       != NULL);
+    assert(file            != NULL);
 
-    FILE* file = fopen(file_path, "w");
     if (file == NULL)
     {
         return ArithmeticTreeErrors_ERROR;
@@ -66,9 +65,9 @@ ArithmeticTreeErrors arithmeticTreeWriteInLatex(Tree* arithmetic_tree, int start
     fprintf(file, "\\documentclass{article}\n\\begin{document}\n\\begin{equation}\n");
 
     recursivlyWriteNodeInformationToFile(file, arithmetic_tree, start_node_index);
+    fprintf(file, "\n");
 
-    fprintf(file, "\n\\end{equation}\n\\end{document}");
-    fclose(file);
+    fprintf(file, "\\end{equation}\n\\end{document}");
 
     return ArithmeticTreeErrors_OK;
 }
@@ -144,23 +143,39 @@ static ArithmeticTreeErrors recursivlyWriteNodeInformationToFile(FILE* file, Tre
               || node_data.function.type == ArithmeticFunctions_EXP
               || node_data.function.type == ArithmeticFunctions_SQRT)
         {
-            fprintf(file, " \\%s{", node_data.function.text);
+            fprintf(file, "%s{(", node_data.function.text);
             recursivlyWriteNodeInformationToFile(file, arithmetic_tree, left_node_index);
-            fprintf(file, "}");
+            fprintf(file, ")}");
         }
         else
         {
-            fprintf(file, "{");
+            fprintf(file, "{(");
             recursivlyWriteNodeInformationToFile(file, arithmetic_tree, left_node_index);
-            fprintf(file, "}%s{", node_data.function.text);
+            if (node_data.function.type == ArithmeticFunctions_MUL)
+            {
+                fprintf(file, ")}\\cdot{(");
+            }
+            else
+            {
+                fprintf(file, ")}%s{(", node_data.function.text);
+            }
             recursivlyWriteNodeInformationToFile(file, arithmetic_tree, right_node_index);
-            fprintf(file, "}");
+            fprintf(file, ")}");
         }
     }
 
     if (node_data.node_type == ArithmeticTreeNodeType_NUMBER)
     {
-        fprintf(file, "%lg", node_data.numerical_data);
+        double number = node_data.numerical_data;
+
+        if (number >= 0)
+        {
+            fprintf(file, "%lg", number);
+        }
+        else
+        {
+            fprintf(file, "(%lg)", number);
+        }
     }
 
     if (node_data.node_type == ArithmeticTreeNodeType_VARIABLE)

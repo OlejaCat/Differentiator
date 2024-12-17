@@ -10,18 +10,20 @@
 #define RIGHT_NODE_ treeGetRightNode(expression_tree, original_node_index)
 
 #define DIFFERENTIATE_LEFT_NODE_ \
-        recursiveDifferentiate(arithmetic_tree, LEFT_NODE_)
+        recursiveDifferentiate(file, arithmetic_tree, LEFT_NODE_)
 
 #define DIFFERENTIATE_RIGHT_NODE_ \
-        recursiveDifferentiate(arithmetic_tree, RIGHT_NODE_)
+        recursiveDifferentiate(file, arithmetic_tree, RIGHT_NODE_)
 
 #define COPY_BRANCH_(node__) \
         arithmeticTreeRecursiveCopyBranch(differentiated_tree, expression_tree, node__)
 
 
-int recursiveDifferentiate(ArithmeticTree* arithmetic_tree,
+int recursiveDifferentiate(FILE*           file,
+                           ArithmeticTree* arithmetic_tree,
                            int             original_node_index)
 {
+    assert(file            != NULL);
     assert(arithmetic_tree != NULL);
 
     Tree* expression_tree     = arithmetic_tree->expression_tree;
@@ -71,6 +73,24 @@ int recursiveDifferentiate(ArithmeticTree* arithmetic_tree,
                            POW(differentiated_tree,
                                COPY_BRANCH_(RIGHT_NODE_),
                                NUMBER(differentiated_tree, 2)));
+
+            case ArithmeticFunctions_POW: {
+                AriphmeticNodeData node = treeGetNodeData(expression_tree, RIGHT_NODE_);
+                if (node.node_type == ArithmeticTreeNodeType_NUMBER)
+                {
+                    return MUL(differentiated_tree,
+                               NUMBER(differentiated_tree,
+                                      node.numerical_data),
+                               MUL(differentiated_tree,
+                                   POW(differentiated_tree,
+                                        COPY_BRANCH_(LEFT_NODE_),
+                                        NUMBER(differentiated_tree,
+                                               node.numerical_data - 1)),
+                                   DIFFERENTIATE_LEFT_NODE_));
+                }
+                printf("No instructions for differentiations...\n");
+                return EMPTY_NODE;
+            }
 
             case ArithmeticFunctions_SIN:
                 return MUL(differentiated_tree,
