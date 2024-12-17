@@ -19,11 +19,14 @@ int main()
     scanf("%127[^\n]", input_string);
 
     int node = parseString(&arm_tree, input_string);
+
+    arithmeticTreeWriteInLatex(arm_tree.expression_tree, node, "start.tex");
     treePrintDataFromArray(arm_tree.expression_tree);
 
     printf("\n\n\n");
 
-    recursiveDifferentiate(&arm_tree, node);
+    node = recursiveDifferentiate(&arm_tree, node);
+    arithmeticTreeWriteInLatex(arm_tree.differentiated_tree, node, "end.tex");
 
     treePrintDataFromArray(arm_tree.differentiated_tree);
 
