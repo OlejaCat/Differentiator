@@ -1,6 +1,7 @@
 #include "differentiation_logic.h"
 
 #include <stdio.h>
+#include <assert.h>
 
 #include "arithmetic_logic.h"
 
@@ -21,6 +22,8 @@
 int recursiveDifferentiate(ArithmeticTree* arithmetic_tree,
                            int             original_node_index)
 {
+    assert(arithmetic_tree != NULL);
+
     Tree* expression_tree     = arithmetic_tree->expression_tree;
     Tree* differentiated_tree = arithmetic_tree->differentiated_tree;
     tree_node_type data       = treeGetNodeData(expression_tree, original_node_index);
@@ -69,14 +72,63 @@ int recursiveDifferentiate(ArithmeticTree* arithmetic_tree,
                                COPY_BRANCH_(RIGHT_NODE_),
                                NUMBER(differentiated_tree, 2)));
 
+            case ArithmeticFunctions_SIN:
+                return MUL(differentiated_tree,
+                           COS(differentiated_tree,
+                               COPY_BRANCH_(LEFT_NODE_)),
+                           DIFFERENTIATE_LEFT_NODE_);
+
+            case ArithmeticFunctions_COS:
+                return MUL(differentiated_tree,
+                           MUL(differentiated_tree,
+                               NUMBER(differentiated_tree, -1),
+                               SIN(differentiated_tree,
+                                   COPY_BRANCH_(LEFT_NODE_))),
+                           DIFFERENTIATE_LEFT_NODE_);
+
+            case ArithmeticFunctions_TG:
+                return MUL(differentiated_tree,
+                           DIV(differentiated_tree,
+                               NUMBER(differentiated_tree, 1),
+                               POW(differentiated_tree,
+                                   COS(differentiated_tree,
+                                       COPY_BRANCH_(LEFT_NODE_)),
+                                       NUMBER(differentiated_tree, 2))),
+                           DIFFERENTIATE_LEFT_NODE_);
+
+            case ArithmeticFunctions_CTG:
+                return MUL(differentiated_tree,
+                           DIV(differentiated_tree,
+                               NUMBER(differentiated_tree, 1),
+                               MUL(differentiated_tree,
+                                   NUMBER(differentiated_tree, -1),
+                                   POW(differentiated_tree,
+                                       SIN(differentiated_tree,
+                                           COPY_BRANCH_(LEFT_NODE_)),
+                                           NUMBER(differentiated_tree, 2)))),
+                           DIFFERENTIATE_LEFT_NODE_);
+
+            case ArithmeticFunctions_EXP:
+                return MUL(differentiated_tree,
+                           EXP(differentiated_tree,
+                               COPY_BRANCH_(LEFT_NODE_)),
+                           DIFFERENTIATE_LEFT_NODE_);
+
+            case ArithmeticFunctions_LN:
+                return MUL(differentiated_tree,
+                           DIV(differentiated_tree,
+                               NUMBER(differentiated_tree, 1),
+                               COPY_BRANCH_(LEFT_NODE_)),
+                           DIFFERENTIATE_LEFT_NODE_);
+
             default:
-                fprintf(stderr, "No instructions for differentiations...");
+                fprintf(stderr, "No instructions for differentiations...\n");
                 exit(1);
         }
     }
     else
     {
-        fprintf(stderr, "Unknown node type...");
+        fprintf(stderr, "Unknown node type...\n");
         exit(1);
     }
 }
@@ -86,3 +138,4 @@ int recursiveDifferentiate(ArithmeticTree* arithmetic_tree,
 #undef DIFFERENTIATE_RIGHT_NODE_
 #undef LEFT_NODE_
 #undef RIGHT_NODE_
+#undef COPY_BRANCH_

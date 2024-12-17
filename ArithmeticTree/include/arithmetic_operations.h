@@ -19,6 +19,7 @@ typedef enum ArithmeticFunctions
     ArithmeticFunctions_POW  =  8,
     ArithmeticFunctions_LN   =  9,
     ArithmeticFunctions_SQRT =  10,
+    ArithmeticFunctions_EXP  =  11,
 } ArithmeticFunctions;
 
 typedef struct ArithmeticFunction
@@ -77,6 +78,10 @@ const ArithmeticFunction ARITHMETIC_FUNCTIONS_ARRAY[] = {
         .type = ArithmeticFunctions_SQRT,
         .text = "sqrt",
     },
+    {
+        .type = ArithmeticFunctions_EXP,
+        .text = "exp",
+    },
 };
 
 const int FUNCTIONS_QUANTITY = sizeof(ARITHMETIC_FUNCTIONS_ARRAY) / sizeof(ArithmeticFunction);
@@ -130,5 +135,76 @@ const int FUNCTIONS_QUANTITY = sizeof(ARITHMETIC_FUNCTIONS_ARRAY) / sizeof(Arith
                                                         .text = "^", \
                                                       } \
                                     }, left_node__, right_node__)
+
+#define COS(tree__, left_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
+                                    { \
+                                         .node_type = ArithmeticTreeNodeType_FUNCTION, \
+                                         .function  = { \
+                                                        .type = ArithmeticFunctions_COS, \
+                                                        .text = "cos", \
+                                                      } \
+                                    }, left_node__, EMPTY_NODE)
+
+#define SIN(tree__, left_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
+                                    { \
+                                         .node_type = ArithmeticTreeNodeType_FUNCTION, \
+                                         .function  = { \
+                                                        .type = ArithmeticFunctions_SIN, \
+                                                        .text = "sin", \
+                                                      } \
+                                    }, left_node__, EMPTY_NODE)
+
+#define LN(tree__, left_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
+                                    { \
+                                         .node_type = ArithmeticTreeNodeType_FUNCTION, \
+                                         .function  = { \
+                                                        .type = ArithmeticFunctions_LN, \
+                                                        .text = "ln", \
+                                                      } \
+                                    }, left_node__, EMPTY_NODE)
+
+#define TG(tree__, left_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
+                                    { \
+                                         .node_type = ArithmeticTreeNodeType_FUNCTION, \
+                                         .function  = { \
+                                                        .type = ArithmeticFunctions_TG, \
+                                                        .text = "tg", \
+                                                      } \
+                                    }, left_node__, EMPTY_NODE)
+
+#define CTG(tree__, left_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
+                                    { \
+                                         .node_type = ArithmeticTreeNodeType_FUNCTION, \
+                                         .function  = { \
+                                                        .type = ArithmeticFunctions_CTG, \
+                                                        .text = "ctg", \
+                                                      } \
+                                    }, left_node__, EMPTY_NODE)
+
+#define SQRT(tree__, left_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
+                                    { \
+                                         .node_type = ArithmeticTreeNodeType_FUNCTION, \
+                                         .function  = { \
+                                                        .type = ArithmeticFunctions_SQRT, \
+                                                        .text = "sqrt", \
+                                                      } \
+                                    }, left_node__, EMPTY_NODE)
+
+#define EXP(tree__, left_node__) \
+        arithmeticTreeCreateNewNode(tree__, \
+                                    { \
+                                         .node_type = ArithmeticTreeNodeType_FUNCTION, \
+                                         .function  = { \
+                                                        .type = ArithmeticFunctions_EXP, \
+                                                        .text = "exp", \
+                                                      } \
+                                    }, left_node__, EMPTY_NODE)
+
 
 #endif // ARITHMETIC_OPEERATIONS_H

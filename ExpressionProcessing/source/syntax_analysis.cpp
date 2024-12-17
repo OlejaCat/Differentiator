@@ -153,8 +153,7 @@ static int parsePower(ArithmeticTree* arithmetic_tree, Token* token_array, int* 
 
     int left_node = parseParen(arithmetic_tree, token_array, ip);
     while (token_array[*ip].type == TokenType_FUNCTION
-        &&
-        token_array[*ip].function.type == ArithmeticFunctions_POW)
+        && token_array[*ip].function.type == ArithmeticFunctions_POW)
     {
         (*ip)++;
 
@@ -172,6 +171,53 @@ static int parseParen(ArithmeticTree* arithmetic_tree, Token* token_array, int* 
     assert(token_array     != NULL);
     assert(ip              != NULL);
 
+    // One variable funcrions processing
+    if (token_array[*ip].type == TokenType_FUNCTION)
+    {
+        Token token = token_array[*ip];
+        (*ip)++;
+
+        int argument_node = parseParen(arithmetic_tree, token_array, ip);
+
+        int result_node = 0;
+        switch (token.function.type)
+        {
+            case ArithmeticFunctions_COS:
+                result_node = COS(arithmetic_tree->expression_tree, argument_node);
+                break;
+
+            case ArithmeticFunctions_SIN:
+                result_node = SIN(arithmetic_tree->expression_tree, argument_node);
+                break;
+
+            case ArithmeticFunctions_TG:
+                result_node = TG(arithmetic_tree->expression_tree, argument_node);
+                break;
+
+            case ArithmeticFunctions_CTG:
+                result_node = CTG(arithmetic_tree->expression_tree, argument_node);
+                break;
+
+            case ArithmeticFunctions_SQRT:
+                result_node = SQRT(arithmetic_tree->expression_tree, argument_node);
+                break;
+
+            case ArithmeticFunctions_LN:
+                result_node = LN(arithmetic_tree->expression_tree, argument_node);
+                break;
+
+            case ArithmeticFunctions_EXP:
+                result_node = EXP(arithmetic_tree->expression_tree, argument_node);
+                break;
+
+            default:
+                fprintf(stderr, "Syntax error: unsupported function type.\n");
+                exit(1);
+        }
+
+        return result_node;
+    }
+
     if (token_array[*ip].type == TokenType_LPAREN)
     {
         (*ip)++;
@@ -179,13 +225,13 @@ static int parseParen(ArithmeticTree* arithmetic_tree, Token* token_array, int* 
 
         if (token_array[*ip].type != TokenType_RPAREN)
         {
-            fprintf(stderr, "Syntax error... brackets\n");
+            fprintf(stderr, "Syntax error: missing closing parenthesis.\n");
             exit(1);
         }
+        (*ip)++;
         return node;
     }
-    else
-    {
-        return parseNumber(arithmetic_tree, token_array, ip);
-    }
+
+    return parseNumber(arithmetic_tree, token_array, ip);
 }
+
